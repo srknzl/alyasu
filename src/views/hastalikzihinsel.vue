@@ -1146,7 +1146,6 @@ Dinginim ve huzurluyum. Çünkü hayatın akışına güveniyorum.
 Zührevi hastalık – AIDS, belsoğukluğu, uçuklar, frengi : (Cinsel suçluluk duygusu. Cezalandırılma ihtiyacı duyma. Cinsel organların günahkar yada pis olduklarına inanma. Birisine tecavüz etmiş olma.)
 
 Cinselliğimi ve onun ifadesini sevgi ve neşeyle kabulleniyorum. Yalnızca beni destekleyen ve kendimi iyi hissettiren düşünceleri kabul ediyorum.
- 
        </pre>
     </b-card>
   </div>
@@ -1165,5 +1164,6 @@ pre {
   word-wrap: break-word; /* Internet Explorer 5.5+ */
   font-family: auto;
   font-size: medium;
+  overflow: visible;
 }
 </style>

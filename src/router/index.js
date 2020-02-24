@@ -23,6 +23,16 @@ const routes = [
     path: "/hastalikzihinsel",
     name: "HZN",
     component: () => import("../views/hastalikzihinsel.vue")
+  },
+  {
+    path: "/ailedanismani",
+    name: "Aile",
+    component: () => import("../views/ailedanismani.vue")
+  },
+  {
+    path: "/accessbars",
+    name: "AccessBars",
+    component: () => import("../views/accessbars.vue")
   }
 ];
 
