@@ -18,8 +18,8 @@
           </b-navbar-nav>
         </b-collapse>
       </b-navbar>
-      <!-- <b-img id="logo" alt="Vue logo" src="./assets/logo.jpeg"></b-img> -->
     </div>
+
     <router-view />
   </div>
 </template>
@@ -30,10 +30,14 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #nav {
   padding: 30px;
+  width: 90%;
 
   a {
     &.router-link-exact-active {
