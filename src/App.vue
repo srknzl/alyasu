@@ -28,7 +28,7 @@
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  // text-align: center;
   color: #2c3e50;
   display: flex;
   flex-direction: column;
@@ -48,6 +48,9 @@
 #logo {
   max-width: 10rem;
   padding-top: 2rem;
+}
+p {
+  text-indent: 2rem;
 }
 </style>
 <script>

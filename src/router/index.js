@@ -22,17 +22,37 @@ const routes = [
   {
     path: "/hastalikzihinsel",
     name: "HZN",
-    component: () => import("../views/hastalikzihinsel.vue")
+    component: () => import("../views/Hastalikzihinsel.vue")
   },
   {
     path: "/ailedanismani",
     name: "Aile",
-    component: () => import("../views/ailedanismani.vue")
+    component: () => import("../views/Ailedanismani.vue")
   },
   {
     path: "/accessbars",
     name: "AccessBars",
-    component: () => import("../views/accessbars.vue")
+    component: () => import("../views/Accessbars.vue")
+  },
+  {
+    path: "/hipnoterapi",
+    name: "Hipnoterapi",
+    component: () => import("../views/Hipnoterapi.vue")
+  },
+  {
+    path: "/bilincaltidili",
+    name: "Bilincalti Dili",
+    component: () => import("../views/BilincaltiDili.vue")
+  },
+  {
+    path: "/alfabioenerji",
+    name: "Bioenerji",
+    component: () => import("../views/Bioenerji.vue")
+  },
+  {
+    path: "/doula",
+    name: "Doula",
+    component: () => import("../views/Doula.vue")
   }
 ];
 
