@@ -6,12 +6,12 @@
         <b-navbar-brand href="#">AlyaSu Gelişim Akademisi</b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
-          <b-navbar-nav>
+          <b-navbar-nav fill align="center" style="display: contents;">
             <b-nav-item to="/">Ana sayfa</b-nav-item>
             <b-nav-item to="/ailedanismani">Aile Danışmanı</b-nav-item>
             <b-nav-item to="/hipnoterapi">Hipnoterapi</b-nav-item>
             <b-nav-item to="/alfabioenerji">Alfabioenerji</b-nav-item>
-            <b-nav-item to="/accessbars">Access Bars</b-nav-item>
+            <b-nav-item to="/accessbars">Erişim Çubukları</b-nav-item>
             <b-nav-item to="/doula">Doula</b-nav-item>
             <b-nav-item to="/bilincaltidili">Bilinçaltı dili</b-nav-item>
             <b-nav-item to="/hakkinda">Hakkında</b-nav-item>

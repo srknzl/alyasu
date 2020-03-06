@@ -1,7 +1,7 @@
 <template>
   <div id="hastalik">
     <b-card
-      title="Hipnoterapi"
+      title="Doula"
       img-src="./assets/doula.jpg"
       img-top
       tag="article"
