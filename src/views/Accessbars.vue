@@ -1,7 +1,7 @@
 <template>
   <div id="aile">
     <b-card
-      title="Access Bars"
+      title="Erişim Çubukları"
       img-src="./assets/access.png"
       img-top
       tag="article"
@@ -9,8 +9,8 @@
       class="mb-2"
     >
       <p>
-        Access Bars; Kafamızdaki 32 noktaya hafif dokunuşlarla yapılan
-        bilinçaltı temizliği enerji çalışmasıdır. (sifa,cinsellik, para,
+        Access Bars(Erişim Çubukları); Kafamızdaki 32 noktaya hafif dokunuşlarla
+        yapılan bilinçaltı temizliği enerji çalışmasıdır. (sifa,cinsellik, para,
         farkındalık, yaratıcılık, beden gibi noktalar ) Access consciousness,
         Amerika da Gary Douglas tarafından ortaya çıkan ve Dr.Dain Heer ile
         birlikte geliştirilerek dünyaya yayılan bir sistemdir. Access daha fazla

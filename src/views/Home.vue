@@ -18,7 +18,8 @@
           </b-card>
         </b-col>
       </b-row>
-      <b-row class="topMargin" align-h="center">
+      <!--
+        <b-row class="topMargin" align-h="center">
         <b-col class="carCol">
           <b-carousel
             id="carousel-1"
@@ -31,7 +32,7 @@
             background="#ababab"
             style="text-shadow: 1px 1px 2px #333;"
           >
-            <!-- Text slides with image -->
+            
             <b-carousel-slide
               caption="Bişeyler"
               text="Nulla vitae elit libero, a pharetra augue mollis interdum."
@@ -42,20 +43,20 @@
               text="Nulla vitae elit libero, a pharetra augue mollis interdum."
               img-src="./assets/2.gif"
             ></b-carousel-slide>
-            <!-- Slides with custom text -->
+            
             <b-carousel-slide img-src="./assets/3.gif">
               <h1>Hello world!</h1>
             </b-carousel-slide>
 
-            <!-- Slides with image only -->
+            
             <b-carousel-slide img-src="./assets/4.gif"></b-carousel-slide>
 
-            <!-- Slides with img slot -->
-            <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
+            
             <b-carousel-slide img-src="./assets/5.gif"></b-carousel-slide>
           </b-carousel>
         </b-col>
       </b-row>
+      -->
     </b-container>
   </div>
 </template>

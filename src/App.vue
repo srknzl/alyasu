@@ -7,7 +7,12 @@
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav fill align="center" style="display: contents;">
-            <b-nav-item to="/">Ana sayfa</b-nav-item>
+            <b-nav-item v-if="this.$router.currentRoute.name !== 'Home'" to="/">
+              Ana sayfa</b-nav-item
+            >
+            <b-nav-item to="/blog">
+              Blog
+            </b-nav-item>
             <b-nav-item to="/ailedanismani">Aile Danışmanı</b-nav-item>
             <b-nav-item to="/hipnoterapi">Hipnoterapi</b-nav-item>
             <b-nav-item to="/alfabioenerji">Alfabioenerji</b-nav-item>
@@ -57,6 +62,10 @@ p {
 export default {
   data: function() {
     return {};
-  }
+  },
+  created() {
+    console.log();
+  },
+  methods: {}
 };
 </script>
