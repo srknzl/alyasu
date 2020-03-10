@@ -1,7 +1,7 @@
 <template>
   <div id="aile">
     <b-card
-      title="Erişim Çubukları"
+      title="Access Bars"
       img-src="./assets/access.png"
       img-top
       tag="article"

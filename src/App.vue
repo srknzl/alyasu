@@ -16,7 +16,7 @@
             <b-nav-item to="/ailedanismani">Aile Danışmanı</b-nav-item>
             <b-nav-item to="/hipnoterapi">Hipnoterapi</b-nav-item>
             <b-nav-item to="/alfabioenerji">Alfabioenerji</b-nav-item>
-            <b-nav-item to="/accessbars">Erişim Çubukları</b-nav-item>
+            <b-nav-item to="/accessbars">Access Bars</b-nav-item>
             <b-nav-item to="/doula">Doula</b-nav-item>
             <b-nav-item to="/bilincaltidili">Bilinçaltı dili</b-nav-item>
             <b-nav-item to="/hakkinda">Hakkında</b-nav-item>
