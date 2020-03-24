@@ -77,7 +77,7 @@
         <b-col class="d-flex flex-column align-items-center justify-content-center" cols="10">
           <b-card
             v-for="blog in blogEntries"
-            :key="blog.id"
+            :key="blog._id"
             :title="blog.title"
             :img-src="blog.coverImageUrl"
             img-top
@@ -87,7 +87,7 @@
           >
             <b-card-text variant="dark">{{ blog.content }}</b-card-text>
             <b-button-group>
-              <b-button class="mr-2" to="/blog/edit/" variant="primary">Dahasını Oku</b-button>
+              <b-button class="mr-2" :to="'/edit-blog/'+blog._id" variant="primary">Dahasını Oku</b-button>
               <b-button class="mr-2" href="#" variant="primary">Düzenle</b-button>
               <b-button class="mr-2" href="#" variant="danger">Sil</b-button>
             </b-button-group>
@@ -99,26 +99,14 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data: function() {
     return {
-      blogEntries: [
-        {
-          title: "Blog 1",
-          content: "Content 1",
-          id: "1",
-          coverImageUrl: "https://vuejs.org/images/logo.png"
-        },
-        {
-          title: "Blog 2",
-          content: "Content 2",
-          id: "2",
-          coverImageUrl: "https://vuejs.org/images/logo.png"
-        }
-      ],
+      blogEntries: [],
       keywords: [],
       options: {
-        buttonLabels: 'fontawesome',
+        buttonLabels: "fontawesome",
         toolbar: {
           buttons: [
             "h1",
@@ -155,6 +143,13 @@ export default {
       return this.keywords.length > 0;
     }
   },
+  created(){
+    axios.get("/blog/blogEntries").then(res => {
+      this.blogEntries = res.data.blogEntries;
+    }).catch(err => {
+      console.log(err);
+    });
+  },
   methods: {
     handleOk(e) {
       e.preventDefault();
@@ -177,19 +172,20 @@ export default {
     processEditOperation(operation) {
       this.content = operation.api.origElements.innerHTML;
     }
-  //   processEditBlog(operation) {
-  //     const foundIndex = this.blogEntries.findIndex(x => {
-  //       return x.id == operation.event.target.id;
-  //     });
-  //     if (foundIndex == -1){
-  //       console.log("Not found");
-  //     }
-  //     else {
-  //       this.blogEntries[foundIndex].content = operation.api.origElements.innerHTML;
-  //       console.log(this.blogEntries[foundIndex].content);
-  //     }
-  //   }
-  // }
+    //   processEditBlog(operation) {
+    //     const foundIndex = this.blogEntries.findIndex(x => {
+    //       return x.id == operation.event.target.id;
+    //     });
+    //     if (foundIndex == -1){
+    //       console.log("Not found");
+    //     }
+    //     else {
+    //       this.blogEntries[foundIndex].content = operation.api.origElements.innerHTML;
+    //       console.log(this.blogEntries[foundIndex].content);
+    //     }
+    //   }
+    // }
+  }
 };
 </script>
 
