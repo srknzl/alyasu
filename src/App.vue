@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <b-img center id="logo" alt="Vue logo" src="./assets/logo.jpeg"></b-img>
+    <b-img center id="logo" alt="Vue logo" src="/assets/logo.jpeg"></b-img>
     <div id="nav">
       <b-navbar toggleable="lg" type="dark" variant="dark">
         <b-navbar-brand href="#">AlyaSu Gelişim Akademisi</b-navbar-brand>
@@ -48,12 +48,12 @@
     }
   }
 }
+p {
+  font-size: 1rem !important;
+}
 #logo {
   max-width: 10rem;
   padding-top: 2rem;
-}
-p {
-  text-indent: 2rem;
 }
 </style>
 <script>

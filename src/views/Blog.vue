@@ -4,7 +4,8 @@
       <b-row>
         <b-col cols="2">
           <b-button-group vertical>
-            <b-button v-b-modal.blog-modal variant="success">Yeni Yazı</b-button>
+            <b-button v-b-modal.blog-modal @click="resetData" variant="success">Yeni Yazı</b-button>
+            <b-spinner class="mt-2" variant="warning" v-if="newBlogLoading"></b-spinner>
             <b-modal
               size="xl"
               id="blog-modal"
@@ -24,11 +25,7 @@
                 >
                   <b-form-input id="name-input" v-model="title" :state="titleState" required></b-form-input>
                 </b-form-group>
-                <b-form-group
-                  label="İçerik: "
-                  label-for="content-input"
-                  invalid-feedback="İçerik girmeniz gerekiyor."
-                >
+                <b-form-group label="İçerik: " label-for="content-input">
                   <medium-editor
                     :text="content"
                     :options="options"
@@ -45,14 +42,15 @@
                   <b-form-file
                     id="cover-image-input"
                     accept="image/*"
-                    placeholder="Dosya seçin."
+                    browse-text="Resim seçiniz."
+                    placeholder="Resim seçin veya sürekleyin."
+                    drop-placeholder="Bırakın."
                     v-model="coverImageUrl"
                     :state="coverImageState"
                     required
                   ></b-form-file>
                 </b-form-group>
                 <b-form-group
-                  :state="keywordState"
                   label="Anahtar Kelimeler(5 tane idealdir): "
                   label-for="keywords-input"
                   invalid-feedback="Anahtar kelimeleri virgülle ayrılmış şekilde giriniz."
@@ -66,16 +64,26 @@
                     duplicate-tag-text="Aynı kelime var"
                     placeholder="Enter veya virgülle ekleyin."
                     v-model="keywords"
-                    :state="keywordState"
-                    required
                   ></b-form-tags>
                 </b-form-group>
               </form>
             </b-modal>
           </b-button-group>
         </b-col>
-        <b-col class="d-flex flex-column align-items-center justify-content-center" cols="10">
+        <b-col
+          v-if="blogsLoading"
+          class="d-flex flex-column align-items-center justify-content-center"
+          cols="10"
+        >
+          <b-spinner variant="success"></b-spinner>
+        </b-col>
+        <b-col
+          v-if="!blogsLoading"
+          class="d-flex flex-column align-items-center justify-content-center"
+          cols="10"
+        >
           <b-card
+            :id="'blog'+blog._id.toString()"
             v-for="blog in blogEntries"
             :key="blog._id"
             :title="blog.title"
@@ -85,12 +93,23 @@
             class="mb-2"
             style="max-width: 40rem; width:75%;"
           >
-            <b-card-text variant="dark">{{ blog.content }}</b-card-text>
+            <span v-html="blog.content"></span>
             <b-button-group>
-              <b-button class="mr-2" :to="'/edit-blog/'+blog._id" variant="primary">Dahasını Oku</b-button>
-              <b-button class="mr-2" href="#" variant="primary">Düzenle</b-button>
-              <b-button class="mr-2" href="#" variant="danger">Sil</b-button>
+              <b-button class="mr-2" :to="'/blog/'+blog._id" variant="primary">Dahasını Oku</b-button>
+              <b-button class="mr-2" :to="'/edit-blog/'+blog._id" variant="success">Düzenle</b-button>
+              <b-button class="mr-2" @click="onDelete(blog._id)" variant="danger">
+                <b-spinner variant="warning" v-if="deleteLoading" small></b-spinner>
+                <span v-if="!deleteLoading">Sil</span>
+              </b-button>
             </b-button-group>
+            <template v-slot:footer>
+              <b-card-text>Anahtar Kelimeler:</b-card-text>
+              <span
+                style="font-style: italic;"
+                v-for="keyword in blog.keywords"
+                :key="keyword"
+              >{{keyword}}</span>
+            </template>
           </b-card>
         </b-col>
       </b-row>
@@ -100,12 +119,14 @@
 
 <script>
 import axios from "axios";
+import editor from "vue2-medium-editor";
 export default {
   data: function() {
     return {
       blogEntries: [],
       keywords: [],
       options: {
+        placeholder: false,
         buttonLabels: "fontawesome",
         toolbar: {
           buttons: [
@@ -126,11 +147,14 @@ export default {
       },
       content: "",
       title: "",
-      coverImageUrl: null
+      coverImageUrl: null,
+      deleteLoading: false,
+      blogsLoading: false,
+      newBlogLoading: false
     };
   },
   components: {
-    "medium-editor": vueMediumEditor.default
+    "medium-editor": editor
   },
   computed: {
     titleState() {
@@ -138,19 +162,30 @@ export default {
     },
     coverImageState() {
       return this.coverImageUrl != null;
-    },
-    keywordState() {
-      return this.keywords.length > 0;
     }
   },
-  created(){
-    axios.get("/blog/blogEntries").then(res => {
-      this.blogEntries = res.data.blogEntries;
-    }).catch(err => {
-      console.log(err);
-    });
+  created() {
+    this.blogsLoading = true;
+    axios
+      .get("/blog/blogEntries")
+      .then(res => {
+        this.blogEntries = res.data.blogEntries;
+        this.blogsLoading = false;
+      })
+      .catch(err => {
+        this.$bvToast.toast("Bloglar getirilemedi : " + JSON.stringify(err));
+        this.blogsLoading = false;
+      });
   },
   methods: {
+    toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    },
     handleOk(e) {
       e.preventDefault();
       this.handleSubmit();
@@ -159,11 +194,43 @@ export default {
       const valid = this.$refs.form.checkValidity();
       return valid;
     },
-    handleSubmit() {
+    async handleSubmit() {
       // Exit when the form isn't valid
       if (!this.checkFormValidity()) {
         return;
       }
+      this.newBlogLoading = true;
+      let coverImageBase64;
+      try {
+        coverImageBase64 = await this.toBase64(this.coverImageUrl);
+      } catch (error) {
+        this.$bvToast.toast("Bir hata var " + error);
+        this.newBlogLoading = false;
+        return;
+      }
+      axios
+        .post("/blog/addBlogEntry", {
+          content: this.content,
+          title: this.title,
+          keywords: this.keywords,
+          coverImageUrl: coverImageBase64
+        })
+        .then(res => {
+          this.$bvToast.toast(res.data.message);
+          this.blogEntries.push({
+            content: this.content,
+            title: this.title,
+            keywords: this.keywords,
+            coverImageUrl: coverImageBase64,
+            _id: res.data._id
+          });
+          this.newBlogLoading = false;
+        })
+        .catch(err => {
+          this.$bvToast.toast("Bir hata var. " + JSON.stringify(err));
+          this.newBlogLoading = false;
+        });
+
       // Hide the modal manually
       this.$nextTick(() => {
         this.$bvModal.hide("blog-modal");
@@ -171,20 +238,29 @@ export default {
     },
     processEditOperation(operation) {
       this.content = operation.api.origElements.innerHTML;
+    },
+    onDelete(_id) {
+      this.deleteLoading = true;
+      axios
+        .delete("/blog/deleteBlogEntry/" + _id.toString())
+        .then(res => {
+          this.$bvToast.toast(res.data.message);
+          const node = document.querySelector("#blog" + _id.toString());
+          node.parentNode.removeChild(node);
+          this.deleteLoading = false;
+        })
+        .catch(err => {
+          this.$bvToast.toast("Bir hata var. " + JSON.stringify(err));
+          this.deleteLoading = false;
+        });
+    },
+    resetData() {
+      this.content = "";
+      this.coverImageUrl = null;
+      this.keywords = [];
+      this.title = "";
+      console.log(this.$refs.mediumEditor);
     }
-    //   processEditBlog(operation) {
-    //     const foundIndex = this.blogEntries.findIndex(x => {
-    //       return x.id == operation.event.target.id;
-    //     });
-    //     if (foundIndex == -1){
-    //       console.log("Not found");
-    //     }
-    //     else {
-    //       this.blogEntries[foundIndex].content = operation.api.origElements.innerHTML;
-    //       console.log(this.blogEntries[foundIndex].content);
-    //     }
-    //   }
-    // }
   }
 };
 </script>
@@ -193,5 +269,8 @@ export default {
 #blog {
   padding: 30px;
   width: 90%;
+}
+img {
+  width: 100%;
 }
 </style>

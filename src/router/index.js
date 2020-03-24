@@ -57,6 +57,11 @@ const routes = [
     component: () => import("../views/Blog.vue")
   },
   {
+    path: "/blog/:id",
+    name: "Blog detail",
+    component: () => import("../views/BlogDetail.vue")
+  },
+  {
     path: "/edit-blog/:id",
     name: "Edit blog",
     component: () => import("../views/EditBlog.vue")

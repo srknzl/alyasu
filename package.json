@@ -16,6 +16,7 @@
     "pretty-data": "^0.40.0",
     "vue": "^2.6.11",
     "vue-router": "^3.1.5",
+    "vue2-medium-editor": "^1.1.6",
     "yargs": "^15.3.0"
   },
   "devDependencies": {
