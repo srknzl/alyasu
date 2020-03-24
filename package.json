@@ -11,6 +11,7 @@
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.5.0",
     "core-js": "^3.6.4",
+    "font-awesome": "^4.7.0",
     "pretty-data": "^0.40.0",
     "vue": "^2.6.11",
     "vue-router": "^3.1.5",

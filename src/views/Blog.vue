@@ -2,15 +2,16 @@
   <div id="blog">
     <b-container>
       <b-row>
-        <b-col cols="3">
+        <b-col cols="2">
           <b-button-group vertical>
-            <b-button v-b-modal.modal-1 variant="success">Yeni Yazı</b-button>
+            <b-button v-b-modal.blog-modal variant="success">Yeni Yazı</b-button>
             <b-modal
+              size="xl"
+              id="blog-modal"
               ok-variant="success"
               cancel-variant="danger"
               ok-title="Tamam"
               cancel-title="İptal"
-              id="modal-1"
               title="Yeni Blog Ekle!"
               @ok="handleOk"
             >
@@ -24,18 +25,16 @@
                   <b-form-input id="name-input" v-model="title" :state="titleState" required></b-form-input>
                 </b-form-group>
                 <b-form-group
-                  :state="contentState"
                   label="İçerik: "
                   label-for="content-input"
                   invalid-feedback="İçerik girmeniz gerekiyor."
                 >
-                  <b-form-textarea
-                    id="content-input"
-                    v-model="content"
-                    :state="contentState"
-                    rows="15"
-                    required
-                  ></b-form-textarea>
+                  <medium-editor
+                    :text="content"
+                    :options="options"
+                    v-on:edit="processEditOperation"
+                    custom-tag="div"
+                  />
                 </b-form-group>
                 <b-form-group
                   :state="coverImageState"
@@ -75,7 +74,7 @@
             </b-modal>
           </b-button-group>
         </b-col>
-        <b-col cols="8" offset="1">
+        <b-col class="d-flex flex-column align-items-center justify-content-center" cols="10">
           <b-card
             v-for="blog in blogEntries"
             :key="blog.id"
@@ -84,11 +83,11 @@
             img-top
             tag="article"
             class="mb-2"
-            style="max-width: 30rem;"
+            style="max-width: 40rem; width:75%;"
           >
             <b-card-text variant="dark">{{ blog.content }}</b-card-text>
             <b-button-group>
-              <b-button class="mr-2" href="#" variant="primary">Dahasını Oku</b-button>
+              <b-button class="mr-2" to="/blog/edit/" variant="primary">Dahasını Oku</b-button>
               <b-button class="mr-2" href="#" variant="primary">Düzenle</b-button>
               <b-button class="mr-2" href="#" variant="danger">Sil</b-button>
             </b-button-group>
@@ -118,17 +117,36 @@ export default {
         }
       ],
       keywords: [],
+      options: {
+        buttonLabels: 'fontawesome',
+        toolbar: {
+          buttons: [
+            "h1",
+            "h2",
+            "h3",
+            "anchor",
+            "bold",
+            "italic",
+            "unorderedlist",
+            "orderedlist",
+            "table"
+          ]
+        },
+        extensions: {
+          table: new MediumEditorTable()
+        }
+      },
       content: "",
       title: "",
       coverImageUrl: null
     };
   },
+  components: {
+    "medium-editor": vueMediumEditor.default
+  },
   computed: {
     titleState() {
       return this.title.length > 0;
-    },
-    contentState() {
-      return this.content.length > 0;
     },
     coverImageState() {
       return this.coverImageUrl != null;
@@ -151,16 +169,27 @@ export default {
       if (!this.checkFormValidity()) {
         return;
       }
-      console.log(this.title);
-      console.log(this.content);
-      console.log(this.coverImageUrl);
-      console.log(this.keywords);
       // Hide the modal manually
       this.$nextTick(() => {
-        this.$bvModal.hide("modal-prevent-closing");
+        this.$bvModal.hide("blog-modal");
       });
+    },
+    processEditOperation(operation) {
+      this.content = operation.api.origElements.innerHTML;
     }
-  }
+  //   processEditBlog(operation) {
+  //     const foundIndex = this.blogEntries.findIndex(x => {
+  //       return x.id == operation.event.target.id;
+  //     });
+  //     if (foundIndex == -1){
+  //       console.log("Not found");
+  //     }
+  //     else {
+  //       this.blogEntries[foundIndex].content = operation.api.origElements.innerHTML;
+  //       console.log(this.blogEntries[foundIndex].content);
+  //     }
+  //   }
+  // }
 };
 </script>
 
