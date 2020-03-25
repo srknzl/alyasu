@@ -62,7 +62,6 @@ export default {
 
 <style>
 #blogDetail {
-  padding: 30px;
   width: 90%;
 }
 img {

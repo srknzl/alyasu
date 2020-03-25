@@ -277,7 +277,6 @@ export default {
 
 <style>
 #editblog {
-  padding: 30px;
   width: 90%;
 }
 img {

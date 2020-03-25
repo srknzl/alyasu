@@ -2,7 +2,7 @@
   <div id="blog">
     <b-container>
       <b-row>
-        <b-col cols="2">
+        <b-col>
           <b-button-group vertical>
             <b-button
               v-if="loggedIn"
@@ -75,17 +75,17 @@
             </b-modal>
           </b-button-group>
         </b-col>
+      </b-row>
+      <b-row>
         <b-col
           v-if="blogsLoading"
           class="d-flex flex-column align-items-center justify-content-center"
-          cols="10"
         >
           <b-spinner variant="success"></b-spinner>
         </b-col>
         <b-col
           v-if="!blogsLoading"
           class="d-flex flex-column align-items-center justify-content-center"
-          cols="10"
         >
           <b-card
             v-for="(blog, ind) in blogEntries"
@@ -96,7 +96,7 @@
             img-top
             tag="article"
             class="mb-2"
-            style="max-width: 40rem; width:75%;"
+            style="max-width: 40rem; width:100%;"
           >
             <span v-html="blog.content"></span>
             <b-button-group>
@@ -107,12 +107,7 @@
                 :to="'/blog-duzenle/'+blog._id"
                 variant="success"
               >Düzenle</b-button>
-              <b-button
-                v-b-modal="'deletemodal'+ind"
-                v-if="loggedIn"
-                class="mr-2"
-                variant="danger"
-              >
+              <b-button v-b-modal="'deletemodal'+ind" v-if="loggedIn" class="mr-2" variant="danger">
                 <b-spinner variant="warning" v-if="deleteLoading" small></b-spinner>
                 <span v-if="!deleteLoading">Sil</span>
               </b-button>
@@ -261,7 +256,6 @@ export default {
 
 <style>
 #blog {
-  padding: 30px;
   width: 90%;
 }
 img {
