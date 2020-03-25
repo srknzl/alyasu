@@ -88,7 +88,7 @@
           cols="10"
         >
           <b-card
-            v-for="blog in blogEntries"
+            v-for="(blog, ind) in blogEntries"
             :id="'blog' + blog._id.toString()"
             :key="blog._id"
             :title="blog.title"
@@ -107,10 +107,26 @@
                 :to="'/blog-duzenle/'+blog._id"
                 variant="success"
               >Düzenle</b-button>
-              <b-button v-if="loggedIn" class="mr-2" @click="onDelete(blog._id)" variant="danger">
+              <b-button
+                v-b-modal="'deletemodal'+ind"
+                v-if="loggedIn"
+                class="mr-2"
+                variant="danger"
+              >
                 <b-spinner variant="warning" v-if="deleteLoading" small></b-spinner>
                 <span v-if="!deleteLoading">Sil</span>
               </b-button>
+              <b-modal
+                :id="'deletemodal'+ind"
+                title="Silinsin mi?"
+                ok-title="Sil"
+                cancel-title="İptal"
+                ok-variant="danger"
+                cancel-variant="success"
+                @ok="onDeleteOk(blog._id)"
+              >
+                <p class="my-4">Gerçekten silmek ister misiniz?</p>
+              </b-modal>
             </b-button-group>
             <template v-slot:footer>
               <b-card-text>Anahtar Kelimeler:</b-card-text>
@@ -118,7 +134,7 @@
                 style="font-style: italic;"
                 v-for="keyword in blog.keywords"
                 :key="keyword"
-              >{{keyword}}, </span>
+              >{{keyword}},</span>
             </template>
           </b-card>
         </b-col>
@@ -224,6 +240,9 @@ export default {
     },
     processEditOperation(operation) {
       this.content = operation.api.origElements.innerHTML;
+    },
+    onDeleteOk(_id) {
+      this.onDelete(_id);
     },
     onDelete(_id) {
       this.deleteLoading = true;

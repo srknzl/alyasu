@@ -140,5 +140,5 @@ function getRoutesXML() {
     ${list}
   </urlset>`;
 }
-console.log(getRoutesXML());
+// console.log(getRoutesXML());
 export default router;
