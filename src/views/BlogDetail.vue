@@ -19,7 +19,7 @@
                 style="font-style: italic;"
                 v-for="keyword in keywords"
                 :key="keyword"
-              >{{keyword}}</span>
+              >{{keyword}}, </span>
             </template>
           </b-card>
         </b-col>
