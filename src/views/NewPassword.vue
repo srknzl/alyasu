@@ -66,7 +66,10 @@ export default {
       return this.form.password.length >= 8;
     },
     passwordAgainState() {
-      return this.form.passwordAgain == this.form.password && this.form.password !== "";
+      return (
+        this.form.passwordAgain == this.form.password &&
+        this.form.password !== ""
+      );
     }
   },
 
@@ -78,6 +81,7 @@ export default {
         .then(res => {
           this.$bvToast.toast(res.data.message);
           this.loading = false;
+          this.$router.push("/giris");
         })
         .catch(err => {
           if (err.response) {

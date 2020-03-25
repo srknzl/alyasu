@@ -234,7 +234,7 @@ export default {
       this.coverImageUrl = null;
       this.keywords = [];
       this.title = "";
-      console.log(this.$refs.mediumEditor);
+      // console.log(this.$refs.mediumEditor);
     }
   }
 };

@@ -29,4 +29,19 @@
   <url>
     <loc>https://alyasugelisimakademisi.com/blog</loc>
   </url>
+  <url>
+    <loc>https://alyasugelisimakademisi.com/blog/:id</loc>
+  </url>
+  <url>
+    <loc>https://alyasugelisimakademisi.com/blog-duzenle/:id</loc>
+  </url>
+  <url>
+    <loc>https://alyasugelisimakademisi.com/giris</loc>
+  </url>
+  <url>
+    <loc>https://alyasugelisimakademisi.com/sifirla</loc>
+  </url>
+  <url>
+    <loc>https://alyasugelisimakademisi.com/yeniSifre/:token</loc>
+  </url>
 </urlset>
