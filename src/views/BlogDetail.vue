@@ -15,7 +15,11 @@
             <b-button to="/blog" variant="danger">Geri dön</b-button>
             <template v-slot:footer>
               <b-card-text>Anahtar Kelimeler:</b-card-text>
-              <span style="font-style: italic;" v-for="keyword in keywords" :key="keyword">{{keyword}} </span>
+              <span
+                style="font-style: italic;"
+                v-for="keyword in keywords"
+                :key="keyword"
+              >{{keyword}}</span>
             </template>
           </b-card>
         </b-col>
@@ -46,7 +50,11 @@ export default {
         this.keywords = res.data.blogEntry.keywords;
       })
       .catch(err => {
-        console.log(err);
+        if (err.response) {
+          this.$bvToast.toast(err.response.data.message);
+        } else {
+          this.$bvToast.toast("Bir hata oldu: " + JSON.stringify(err));
+        }
       });
   }
 };

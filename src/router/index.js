@@ -1,13 +1,14 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+import store from "../store/index";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "Home",
+    name: "Anasayfa",
     component: Home
   },
   {
@@ -62,9 +63,27 @@ const routes = [
     component: () => import("../views/BlogDetail.vue")
   },
   {
-    path: "/edit-blog/:id",
+    path: "/blog-duzenle/:id",
     name: "Edit blog",
-    component: () => import("../views/EditBlog.vue")
+    component: () => import("../views/EditBlog.vue"),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/giris",
+    name: "Giriş",
+    component: () => import("../views/Login.vue")
+  },
+  {
+    path: "/sifirla",
+    name: "Sıfırla",
+    component: () => import("../views/ResetPassword.vue")
+  },
+  {
+    path: "/yeniSifre/:token",
+    name: "Yeni Şifre",
+    component: () => import("../views/NewPassword.vue")
   }
 ];
 
@@ -72,6 +91,26 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes
+});
+
+router.beforeEach(async (to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.state.loggedIn) {
+      await store.dispatch("checkLogin", {
+        redirect: "noredirect"
+      });
+    }
+    if (!store.state.loggedIn) {
+      next({
+        path: '/giris',
+        query: { redirect: to.fullPath }
+      });
+    } else {
+      next();
+    }
+  } else {
+    next(); // make sure to always call next()!
+  }
 });
 
 function getRoutesList(routes, pre) {

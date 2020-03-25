@@ -1,14 +1,20 @@
 <template>
   <div id="editblog">
     <b-container>
-      <b-row>
+      <b-row v-if="hata">
+        <b-card-text style="color: white;">Hata oldu tekrar deneyin.</b-card-text>
+      </b-row>
+      <b-row v-if="!hata">
         <b-col
           class="d-flex flex-column align-items-center justify-content-center"
           v-if="fetchLoading"
         >
           <b-spinner variant="success"></b-spinner>
         </b-col>
-        <b-col  v-if="!fetchLoading" class="d-flex flex-column align-items-center justify-content-center">
+        <b-col
+          v-if="!fetchLoading"
+          class="d-flex flex-column align-items-center justify-content-center"
+        >
           <b-card
             img-alt="Resim"
             :img-src="oldImage"
@@ -81,6 +87,7 @@
 <script>
 import axios from "axios";
 import editor from "vue2-medium-editor";
+import store from "../store/index";
 export default {
   data: function() {
     return {
@@ -104,6 +111,7 @@ export default {
         },
         placeholder: false
       },
+      hata: false,
       content: "",
       keywords: [],
       title: "",
@@ -133,7 +141,23 @@ export default {
         this.fetchLoading = false;
       })
       .catch(err => {
-        this.$bvToast.toast("Bir hata oldu: " + JSON.stringify(err));
+        if (err.response) {
+          if (
+            err.response.data.error.statusCode == 422 &&
+            err.response.data.error.problems.length > 0
+          ) {
+            let s = "";
+            err.response.data.error.problems.forEach(x => {
+              s += " * " + x.msg;
+            });
+            this.$bvToast.toast(err.response.data.message + ":     " + s);
+          } else {
+            this.$bvToast.toast(err.response.data.message);
+          }
+        } else {
+          this.$bvToast.toast("Bir hata oldu: " + JSON.stringify(err));
+        }
+        this.hata = true;
         this.fetchLoading = false;
       });
   },
@@ -170,11 +194,32 @@ export default {
             keywords: this.keywords
           })
           .then(res => {
+            store.commit("editBlog", {
+              _id: this.$route.params.id,
+              content: this.content,
+              title: this.title,
+              keywords: this.keywords
+            });
             this.$bvToast.toast(res.data.message);
             this.editLoading = false;
           })
           .catch(err => {
-            this.$bvToast.toast("Bir hata var. " + JSON.stringify(err));
+            if (err.response) {
+              if (
+                err.response.data.error.statusCode == 422 &&
+                err.response.data.error.problems.length > 0
+              ) {
+                let s = "";
+                err.response.data.error.problems.forEach(x => {
+                  s += " * " + x.msg;
+                });
+                this.$bvToast.toast(err.response.data.message + ":     " + s);
+              } else {
+                this.$bvToast.toast(err.response.data.message);
+              }
+            } else {
+              this.$bvToast.toast("Bir hata oldu: " + JSON.stringify(err));
+            }
             this.editLoading = false;
           });
       } else {
@@ -182,7 +227,7 @@ export default {
         try {
           coverImageBase64 = await this.toBase64(this.coverImageUrl);
         } catch (error) {
-          this.$bvToast.toast("Bir hata var " + error);
+          this.$bvToast.toast("Bir hata var " + JSON.stringify(error));
           this.editLoading = false;
           return;
         }
@@ -194,12 +239,34 @@ export default {
             keywords: this.keywords
           })
           .then(res => {
+            store.commit("editBlogChangeCover", {
+              _id: this.$route.params.id,
+              content: this.content,
+              title: this.title,
+              coverImageUrl: this.coverImageUrl,
+              keywords: this.keywords
+            });
             this.$bvToast.toast(res.data.message);
             this.oldImage = coverImageBase64;
             this.editLoading = false;
           })
           .catch(err => {
-            this.$bvToast.toast("Bir hata var. " + JSON.stringify(err));
+            if (err.response) {
+              if (
+                err.response.data.error.statusCode == 422 &&
+                err.response.data.error.problems.length > 0
+              ) {
+                let s = "";
+                err.response.data.error.problems.forEach(x => {
+                  s += " * " + x.msg;
+                });
+                this.$bvToast.toast(err.response.data.message + ":     " + s);
+              } else {
+                this.$bvToast.toast(err.response.data.message);
+              }
+            } else {
+              this.$bvToast.toast("Bir hata oldu: " + JSON.stringify(err));
+            }
             this.editLoading = false;
           });
       }

@@ -4,7 +4,12 @@
       <b-row>
         <b-col cols="2">
           <b-button-group vertical>
-            <b-button v-b-modal.blog-modal @click="resetData" variant="success">Yeni Yazı</b-button>
+            <b-button
+              v-if="loggedIn"
+              v-b-modal.blog-modal
+              @click="resetData"
+              variant="success"
+            >Yeni Yazı</b-button>
             <b-spinner class="mt-2" variant="warning" v-if="newBlogLoading"></b-spinner>
             <b-modal
               size="xl"
@@ -83,8 +88,8 @@
           cols="10"
         >
           <b-card
-            :id="'blog'+blog._id.toString()"
             v-for="blog in blogEntries"
+            :id="'blog' + blog._id.toString()"
             :key="blog._id"
             :title="blog.title"
             :img-src="blog.coverImageUrl"
@@ -96,8 +101,13 @@
             <span v-html="blog.content"></span>
             <b-button-group>
               <b-button class="mr-2" :to="'/blog/'+blog._id" variant="primary">Dahasını Oku</b-button>
-              <b-button class="mr-2" :to="'/edit-blog/'+blog._id" variant="success">Düzenle</b-button>
-              <b-button class="mr-2" @click="onDelete(blog._id)" variant="danger">
+              <b-button
+                v-if="loggedIn"
+                class="mr-2"
+                :to="'/blog-duzenle/'+blog._id"
+                variant="success"
+              >Düzenle</b-button>
+              <b-button v-if="loggedIn" class="mr-2" @click="onDelete(blog._id)" variant="danger">
                 <b-spinner variant="warning" v-if="deleteLoading" small></b-spinner>
                 <span v-if="!deleteLoading">Sil</span>
               </b-button>
@@ -120,10 +130,10 @@
 <script>
 import axios from "axios";
 import editor from "vue2-medium-editor";
+import store from "../store/index";
 export default {
   data: function() {
     return {
-      blogEntries: [],
       keywords: [],
       options: {
         placeholder: false,
@@ -150,7 +160,8 @@ export default {
       coverImageUrl: null,
       deleteLoading: false,
       blogsLoading: false,
-      newBlogLoading: false
+      newBlogLoading: false,
+      coverImageBase64: ""
     };
   },
   components: {
@@ -162,20 +173,17 @@ export default {
     },
     coverImageState() {
       return this.coverImageUrl != null;
+    },
+    loggedIn() {
+      return store.state.loggedIn;
+    },
+    blogEntries() {
+      return store.state.blogEntries;
     }
   },
   created() {
     this.blogsLoading = true;
-    axios
-      .get("/blog/blogEntries")
-      .then(res => {
-        this.blogEntries = res.data.blogEntries;
-        this.blogsLoading = false;
-      })
-      .catch(err => {
-        this.$bvToast.toast("Bloglar getirilemedi : " + JSON.stringify(err));
-        this.blogsLoading = false;
-      });
+    store.dispatch("fetchBlogs", this);
   },
   methods: {
     toBase64(file) {
@@ -200,37 +208,15 @@ export default {
         return;
       }
       this.newBlogLoading = true;
-      let coverImageBase64;
       try {
-        coverImageBase64 = await this.toBase64(this.coverImageUrl);
+        this.coverImageBase64 = await this.toBase64(this.coverImageUrl);
       } catch (error) {
-        this.$bvToast.toast("Bir hata var " + error);
+        this.$bvToast.toast("Bir hata var " + JSON.stringify(error));
         this.newBlogLoading = false;
         return;
       }
-      axios
-        .post("/blog/addBlogEntry", {
-          content: this.content,
-          title: this.title,
-          keywords: this.keywords,
-          coverImageUrl: coverImageBase64
-        })
-        .then(res => {
-          this.$bvToast.toast(res.data.message);
-          this.blogEntries.push({
-            content: this.content,
-            title: this.title,
-            keywords: this.keywords,
-            coverImageUrl: coverImageBase64,
-            _id: res.data._id
-          });
-          this.newBlogLoading = false;
-        })
-        .catch(err => {
-          this.$bvToast.toast("Bir hata var. " + JSON.stringify(err));
-          this.newBlogLoading = false;
-        });
 
+      store.dispatch("addBlogEntry", this);
       // Hide the modal manually
       this.$nextTick(() => {
         this.$bvModal.hide("blog-modal");
@@ -241,18 +227,7 @@ export default {
     },
     onDelete(_id) {
       this.deleteLoading = true;
-      axios
-        .delete("/blog/deleteBlogEntry/" + _id.toString())
-        .then(res => {
-          this.$bvToast.toast(res.data.message);
-          const node = document.querySelector("#blog" + _id.toString());
-          node.parentNode.removeChild(node);
-          this.deleteLoading = false;
-        })
-        .catch(err => {
-          this.$bvToast.toast("Bir hata var. " + JSON.stringify(err));
-          this.deleteLoading = false;
-        });
+      store.dispatch("deleteBlog", { vm: this, _id: _id });
     },
     resetData() {
       this.content = "";

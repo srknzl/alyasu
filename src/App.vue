@@ -2,14 +2,13 @@
   <div id="app">
     <b-img center id="logo" alt="Vue logo" src="/assets/logo.jpeg"></b-img>
     <div id="nav">
+      <b-navbar-brand style="color:white;" href="#">AlyaSu Gelişim Akademisi</b-navbar-brand>
+
       <b-navbar toggleable="lg" type="dark" variant="dark">
-        <b-navbar-brand href="#">AlyaSu Gelişim Akademisi</b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav fill align="center" style="display: contents;">
-            <b-nav-item v-if="this.$router.currentRoute.name !== 'Home'" to="/"
-              >Ana sayfa</b-nav-item
-            >
+            <b-nav-item v-if="this.$router.currentRoute.name !== 'Anasayfa'" to="/">Ana sayfa</b-nav-item>
             <b-nav-item to="/blog">Blog</b-nav-item>
             <b-nav-item to="/ailedanismani">Aile Danışmanı</b-nav-item>
             <b-nav-item to="/hipnoterapi">Hipnoterapi</b-nav-item>
@@ -18,6 +17,8 @@
             <b-nav-item to="/doula">Doula</b-nav-item>
             <b-nav-item to="/bilincaltidili">Bilinçaltı dili</b-nav-item>
             <b-nav-item to="/hakkinda">Hakkında</b-nav-item>
+            <b-button v-if="!loggedIn" to="/giris" variant="success">Giriş</b-button>
+            <b-button v-if="loggedIn" variant="danger" @click.prevent="logout">Çıkış</b-button>
           </b-navbar-nav>
         </b-collapse>
       </b-navbar>
@@ -57,10 +58,23 @@ p {
 }
 </style>
 <script>
+import store from "./store/index";
 export default {
   data: function() {
     return {};
   },
-  methods: {}
+  created(){
+    store.dispatch("checkLogin");
+  },
+  computed: {
+    loggedIn(){
+      return store.state.loggedIn;
+    }
+  },
+  methods: {
+    logout(){
+      store.dispatch("logout",this);
+    }
+  }
 };
 </script>
