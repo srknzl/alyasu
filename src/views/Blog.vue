@@ -118,7 +118,7 @@
                 style="font-style: italic;"
                 v-for="keyword in blog.keywords"
                 :key="keyword"
-              >{{keyword}}</span>
+              >{{keyword}}, </span>
             </template>
           </b-card>
         </b-col>
