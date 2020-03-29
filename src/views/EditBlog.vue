@@ -70,7 +70,7 @@
                 ></b-form-tags>
               </b-form-group>
             </form>
-            <b-button-group>
+            <b-button-group class="d-flex flex-wrap">
               <b-button class="mr-2" @click.prevent="onSubmit" variant="success">
                 <b-spinner variant="danger" v-if="editLoading" small></b-spinner>
                 <span v-if="!editLoading">Tamam</span>

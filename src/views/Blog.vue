@@ -100,7 +100,7 @@
             style="max-width: 40rem; width:100%;"
           >
             <span v-html="blog.content"></span>
-            <b-button-group>
+            <b-button-group class="d-flex flex-wrap">
               <b-button class="mr-2" :to="'/blog/'+blog._id" variant="primary">Dahasını Oku</b-button>
               <b-button
                 v-if="loggedIn"
