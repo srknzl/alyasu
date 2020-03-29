@@ -16,7 +16,6 @@
             <b-nav-item to="/accessbars">Access Bars</b-nav-item>
             <b-nav-item to="/doula">Doula</b-nav-item>
             <b-nav-item to="/bilincaltidili">Bilinçaltı dili</b-nav-item>
-            <b-nav-item to="/hakkinda">Hakkında</b-nav-item>
             <b-button v-if="!loggedIn" to="/giris" variant="success">Giriş</b-button>
             <b-button v-if="loggedIn" variant="danger" @click.prevent="logout">Çıkış</b-button>
           </b-navbar-nav>

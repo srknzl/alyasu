@@ -20,6 +20,7 @@
               cancel-title="İptal"
               title="Yeni Blog Ekle!"
               @ok="handleOk"
+              no-enforce-focus
             >
               <form ref="form" @submit.stop.prevent="handleSubmit">
                 <b-form-group
