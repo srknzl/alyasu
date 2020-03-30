@@ -30,7 +30,7 @@
 
 <script>
 import axios from "axios";
-
+import url from "../util/url";
 export default {
   data: function() {
     return {
@@ -42,7 +42,7 @@ export default {
   },
   created() {
     axios
-      .get("/blog/blogEntries/" + this.$route.params.id)
+      .get(url+"/blog/blogEntries/" + this.$route.params.id)
       .then(res => {
         this.title = res.data.blogEntry.title;
         this.content = res.data.blogEntry.content;

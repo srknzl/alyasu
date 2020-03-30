@@ -88,6 +88,7 @@
 import axios from "axios";
 import editor from "vue2-medium-editor";
 import store from "../store/index";
+import url from "../util/url";
 export default {
   data: function() {
     return {
@@ -132,7 +133,7 @@ export default {
   created() {
     this.fetchLoading = true;
     axios
-      .get("/blog/blogEntries/" + this.$route.params.id)
+      .get(url+"/blog/blogEntries/" + this.$route.params.id)
       .then(res => {
         this.title = res.data.blogEntry.title;
         this.content = res.data.blogEntry.content;
@@ -187,7 +188,7 @@ export default {
       this.editLoading = true;
       if (this.coverImageUrl == null) {
         axios
-          .put("/blog/editBlogEntry/" + this.$route.params.id, {
+          .put(url+"/blog/editBlogEntry/" + this.$route.params.id, {
             content: this.content,
             coverImageUrl: this.oldImage,
             title: this.title,
@@ -232,7 +233,7 @@ export default {
           return;
         }
         axios
-          .put("/blog/editBlogEntry/" + this.$route.params.id, {
+          .put(url+"/blog/editBlogEntry/" + this.$route.params.id, {
             content: this.content,
             coverImageUrl: coverImageBase64,
             title: this.title,

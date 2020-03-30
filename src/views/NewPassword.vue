@@ -50,6 +50,7 @@
 
 <script>
 import axios from "axios";
+import url from "../util/url";
 export default {
   data() {
     return {
@@ -77,7 +78,7 @@ export default {
     onSubmit() {
       this.loading = true;
       axios
-        .post("/auth/yeniSifre", { ...this.form, token: this.token })
+        .post(url+"/auth/yeniSifre", { ...this.form, token: this.token })
         .then(res => {
           this.$bvToast.toast(res.data.message);
           this.loading = false;

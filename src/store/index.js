@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from "axios";
+import url from "../util/url";
 
 Vue.use(Vuex);
 
@@ -54,7 +55,7 @@ export default new Vuex.Store({
   },
   actions: {
     async checkLogin({ commit, state }) {
-      await axios.post("/auth/giris-kontrol", {}, {
+      await axios.post(url+"/auth/giris-kontrol", {}, {
         withCredentials: true
       }).then(res => {
         commit("login");
@@ -63,7 +64,7 @@ export default new Vuex.Store({
       });
     },
     logout({ commit, state }, vm) {
-      axios.post("/auth/cikis", {}, {
+      axios.post(url+"/auth/cikis", {}, {
         withCredentials: true
       }).then(res => {
         vm.$bvToast.toast("Çıkış yapıldı");
@@ -78,7 +79,7 @@ export default new Vuex.Store({
     },
     login({ commit, state }, vm) {
       axios
-        .post("/auth/giris", vm.form)
+        .post(url+"/auth/giris", vm.form)
         .then(res => {
           vm.$bvToast.toast(res.data.message);
           vm.loading = false;
@@ -111,7 +112,7 @@ export default new Vuex.Store({
     },
     fetchBlogs({ commit, state }, vm) {
       axios
-        .get("/blog/blogEntries")
+        .get(url+"/blog/blogEntries")
         .then(res => {
           commit("setBlogEntries", res.data.blogEntries);
           vm.blogsLoading = false;
@@ -127,7 +128,7 @@ export default new Vuex.Store({
     },
     addBlogEntry({ commit, state }, vm) {
       axios
-        .post("/blog/addBlogEntry", {
+        .post(url+"/blog/addBlogEntry", {
           content: vm.content,
           title: vm.title,
           keywords: vm.keywords,
@@ -166,7 +167,7 @@ export default new Vuex.Store({
     },
     deleteBlog({ commit, state }, { vm, _id }) {
       axios
-        .delete("/blog/deleteBlogEntry/" + _id.toString())
+        .delete(url+"/blog/deleteBlogEntry/" + _id.toString())
         .then(res => {
           vm.$bvToast.toast(res.data.message);
           const node = document.querySelector("#blog" + _id.toString());

@@ -33,6 +33,7 @@
 
 <script>
 import axios from "axios";
+import url from "../util/url";
 export default {
   data() {
     return {
@@ -46,7 +47,7 @@ export default {
     onSubmit() {
       this.loading = true;
       axios
-        .post("/auth/sifirla", this.form)
+        .post(url+"/auth/sifirla", this.form)
         .then(res => {
           this.$bvToast.toast(res.data.message);
           this.loading = false;

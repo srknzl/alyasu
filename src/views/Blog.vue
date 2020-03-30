@@ -140,7 +140,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import editor from "vue2-medium-editor";
 import store from "../store/index";
 export default {
